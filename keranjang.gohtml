@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  
+    </head>
+<body>
+{{template "navbar.gohtml" .}}
+<form action="keranjangbayar" method="post" enctype="multipart/form-data" onsubmit="return validasi()" >
+<div class="container" style="padding-left:3%;padding-right:3%;" id="container">
+	<a href="index"><button  type="button" class="btn btn-primary" style="width:49%;" >Back</button></a>
+    <a href="keranjang"><button  type="button" class="btn btn-primary" style="width:50%;" onclick="delCookie()">Hapus Semua Barang</button></a>
+
+	{{range .Isikeranjang}}
+	<div class="card" >
+		<div class="form-row card-body">
+			<div class="list-group-item"> <img src="img/{{.Idproduk}}.jpg" height="100px" width="120px" /> </div>
+			<div class="col-4">
+				Nama: <input type="text" class="form-control" 			name="namaproduk" value="{{.Namaproduk}}" readonly>
+				Keterangan <input type="text" class="form-control"  	name="keterangan"	value="{{.Keterangan}}" >
+			</div>
+			<div class="col">
+				Kode: <input type="text" class="form-control" 			name="idproduk" value="{{.Idproduk}}" readonly >
+				Pilih gambar jika ada contoh model: (max 1mb) <input 	name="image{{.Idproduk}}" type="file" class="form-control image" value="" />
+			</div>
+			<a href="keranjang"><button  type="button" class="btn-danger" onclick="delItem({{.Idproduk}})"> X </button></a>
+		</div>
+		<div class="form-row card-body">
+			<div class="col">
+				Jumlah: <input type="text" class="form-control" 		name="jumlah" value="{{.Jumlah}}">
+			</div>
+			<div class="col">
+				Harga Per Lusin<input type="text" class="form-control"	name="harga"  value="{{.Harga}}" readonly>
+			</div>
+		</div>
+	</div>
+	{{end}}
+	<br>Total Harga :<input type="text" class="form-control" id="totalharga" name="totalharga" readonly value="{{.Totalharga}}" >
+	{{if gt .Totalharga 0}}
+    <button type="submit" id="submit" class="btn btn-primary" >Checkout</button>
+	{{end}}
+	
+</div>
+</form>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="js/jquery.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script>
+	var now = new Date();
+ 	var time = now.getTime();
+ 	time += 3600 * 1000;
+ 	now.setTime(time);
+	//theDiv.insertAdjacentHTML('afterend','<div class="form-group"> <label>Username/ID</label><input type="text" name="username" class="form-control" id="exampleInputText" >  </div>')
+
+function getCookie(name) {
+	var value = ";" + document.cookie;
+	var parts = value.split("; " + name + "=");
+	if (parts.length == 2) return parts.pop().split(";").shift();
+	
+}
+
+function delItem(idproduk){
+	var cookie_name = "Isikeranjang";
+var result = confirm("Yakin Menghapus??");
+if (result) {
+    //Logic to delete the item
+	var json_str = getCookie(cookie_name);
+	json_str = window.atob(json_str);
+	if(json_str != ''){
+		var json_data = JSON.parse(json_str);	
+		for (var i = 0; i < json_data.length; i++) {
+			if(json_data[i]["Idproduk"].toString() == idproduk.toString()){
+				json_data.splice(i,1);
+			}
+		}
+		json_str = JSON.stringify(json_data);
+	}
+	alert("Barang berhasil dihapus");
+	document.cookie = 
+	cookie_name + '=' + window.btoa(json_str) + 
+	'; expires=' + now.toUTCString() + 
+	'; path=/';
+}
+}
+
+function delCookie() {
+	document.cookie = "Isikeranjang=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //del cookie
+}
+
+function validasi() {
+    if (confirm('Yakin lanjut membayar?')) {
+		delCookie()
+		return true;
+    } else {
+        return false;
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<html>
+		<head>
+			<meta charset='utf-8'>
+			<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+			<meta name='viewport' content='width=device-width, initial-scale=1'>
+			<link rel="stylesheet" href="css/bootstrap.min.css">
+		</head>
+<body>
+{{template "navbar.gohtml" .}}
+	<div class="container" style="padding-left:3%;padding-right:3%;" id="container">
+{{template "tambahkeranjang.gohtml" .}}
+		<div class="card mb-3" >
+			<div class="card" >
+				<div class="btn-group mr-2" role="group" > <a class="btn btn-secondary" href="index">Back</a> </div>
+			<center><h3>Detail Produk</h3></center>
+				<div class="card-body list-group-item">
+					<div class="row no-gutters ">
+						<div class="col-md-5"> 
+                            <img src="img/{{.Detailproduks.Filename}}" class="card-img" alt="produk" style="height:350px;width:400px;" />
+                        </div>
+                        
+                        <div class="col-md-5">
+                            <div class="card-body">
+                                <h5 class="card-title">{{.Detailproduks.Idproduk}}</h5>
+                                <p class="card-text">Harga:{{.Detailproduks.Harga}}</p>
+								<br>
+								Deskripsi:<br>
+                                <p class="card-text">{{.Detailproduks.Deskripsi}}</p>
+                            </div>
+                        </div>
+
+                    	{{if (gt .Status 0)}}
+                            <button  class="btn btn-primary" style="width:100%;" onclick="popup({{.Detailproduks.Idproduk}})">  Tambah Ke Keranjang  </button>
+                        {{else}}
+                             
+                        {{end}}
+                    
+					</div>
+                    
+				</div>
+
+
+			</div>
+		</div>
+	
+	</div>
+
+</body>   
+</html>

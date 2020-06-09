@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  
+    </head>
+<body>
+{{template "navbar.gohtml" .}}
+	<div class="container" style="padding-left:5%;padding-right:5%;">
+		<div class="card mb-3" >
+		    <a href="index"><button type="button" class="btn btn-primary" style="width: 100%;">Back</button></a>
+            <div class="card" >
+            <center><h3>Detail Transaksi</h3></center>
+                <div class="card">
+                    <div class="d-flex w-100 justify-content-between">
+                        <center><h5 class="mb-1">ID Transaksi : {{.Idtransaksi}}</h5></center>
+                    </div>
+                    <div class="form-row card-body"> 
+                    {{range .Transaksis}}
+                        <a href="produk?idproduk={{.Idproduk}}" class="list-group-item list-group-item-action">
+                        <h5 class="mb-1">Nama Produk: {{.Namaproduk}}</h5>
+                        <img src="/img/{{.Idproduk}}.jpg" height="100px" width="120px" />
+                        Request model seperti : <img src="/img/req/{{$.Idtransaksi}}req{{.Idproduk}}.jpg" height="100px" width="120px" /> 
+                        <div class="d-flex w-100 justify-content-between">
+                            <small class="text-muted">Kode produk:{{.Idproduk}}</small>
+                        </div>
+                        Keterangan:
+                        <p class="mb-1">{{.Keterangan}}</p>
+                        <small class="text-muted">Jumlah {{.Jumlah}} Lusin X Rp.{{.Harga}}</small>
+                        </a>
+                    {{end}}
+                    </div>
+                </div>
+                {{if (eq .Statusid 0)}}
+                    {{if (eq .Statustrans 2)}}
+                        <button type="button" class="btn btn-primary" style="width: 100%;" onclick="popupverifikasi()">Verifikasi Bukti</button>
+                    {{else if (eq .Statustrans 3) }}
+                        <a href="transaksiaction?idtransaksi={{.Idtransaksi}}&status=4"><button type="button" class="btn btn-primary" style="width: 100%;">Siap diambil</button></a>
+                    {{end}}
+                {{else}}
+                    {{if (eq .Statustrans 1)}}
+                        <button type="button" class="btn btn-primary" style="width: 100%;" onclick="popupkonfirmasi()">Konfirmasi Bukti</button>
+                    {{else if (eq .Statustrans 4)}}
+                        <a href="transaksiaction?idtransaksi={{.Idtransaksi}}&status=5"><button type="button" class="btn btn-primary" style="width: 100%;">Selesai</button></a>
+                    {{end}}
+                {{end}}
+		    </div>
+		</div>
+	</div>
+
+<div id="popupkonfirmasi" style="height:100%; width:100%; position:fixed; top:0; left:0; background-color:rgba(80, 80, 80, 0.5); z-index: 2; display:none;"> 
+    <div class="container" style="padding:5%; background-color:white; width:68%; height:100%;">
+        <center><h3>Upload Bukti Transfer</h3></center>
+        <form action="transaksikonfirmasi?idtransaksi={{.Idtransaksi}}" method="POST" enctype="multipart/form-data" onsubmit="return validasi()">
+            <div class="form-group">
+                Upload Foto Bukti Transfer (max 1mb):<br>
+                <input type="file" name="image" class="form-control" /><br>
+                <div class="form-group">
+                    <button  type="button" class="btn btn-primary" onclick="popupkonfirmasi()">Back</button>
+                    <button type="submit" class="btn btn-primary" onclick="return confirm()" >Submit</button>
+                </div>
+            </div>
+        </form>
+	</div>
+</div>
+
+<div id="popupverifikasi" style="height:100%; width:100%; position:fixed; top:0; left:0; background-color:rgba(80, 80, 80, 0.5); z-index: 2; display:none;"> 
+    <div class="container" style="padding:5%; background-color:white; width:68%; height:100%;">
+        <center><h3>Cek Bukti Transfer</h3></center>
+           <div class="form-group">
+                Foto Bukti Transfer (max 1mb):<br>
+                <img src="/img/bukti/{{$.Idtransaksi}}.jpg" height="400px" width="500px" /> <br>
+                <div class="form-group">
+                    <button  type="button" class="btn btn-primary" onclick="popupverifikasi()">Back</button>
+                    <a href="transaksiaction?idtransaksi={{.Idtransaksi}}&status=1&tolak=1"><button type="button" class="btn btn-primary" onclick="return confirm()" >Tolak</button></a>
+                    <a href="transaksiaction?idtransaksi={{.Idtransaksi}}&status=3"><button type="button" class="btn btn-primary" onclick="return confirm()" >Konfirmasi</button></a>
+                </div>
+            </div>
+	</div>
+</div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script>
+var konfirmasi = document.getElementById("popupkonfirmasi");
+var verifikasi = document.getElementById("popupverifikasi");
+var idproduk = '';
+konfirmasi.style.display = "none";
+function popupkonfirmasi(){
+
+	if(konfirmasi.style.display == "none"){
+		konfirmasi.style.display = "block";
+	}else{
+		konfirmasi.style.display = "none";
+	}
+}
+function popupverifikasi(){
+	if(verifikasi.style.display == "none"){
+		verifikasi.style.display = "block";
+	}else{
+		verifikasi.style.display = "none";
+	}
+}
+</script>
+</body>
+</html>

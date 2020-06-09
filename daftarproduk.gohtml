@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<title>Page Title</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<script src=''></script>
+	</head>
+	<body>
+    {{template "navbar.gohtml" .}}
+	<div class="container">
+	<a href="/index"><button  type="button" class="btn btn-primary" style="width:97%;">Back</button></a><br>
+	<div class="row" id="daftarproduk" style="width: 100%;">
+
+    {{range .Produks}}
+        <div class="col-sm-3" > 
+		   <div class="card" > 
+		   <a href="/produk?idproduk={{.Idproduk}}"> 
+			<div class="card-body">
+            	<div class="list-group-item"><center><h5> {{.Namaproduk}} </h5></center></div>
+				<div class="list-group-item"> <img src="/img/{{.Filename}}" height="150px" width="150px" /> </div>
+				<div class="list-group-item"><center><h5> Rp{{.Harga}} </h5></center></div>
+			</div>
+			</a>
+        	<div class="btn-group" role="group" aria-label="Basic example">
+            	<button  class="btn btn-primary" style="width:50%;" onclick="">  Ubah </button>
+				<button  class="btn btn-primary" style="width:50%;" onclick="return confirm()">  Hapus </button>
+			</div>
+    	   </div>
+		</div>
+    {{end}}
+
+	</div>
+	</div>
+	</body>
+	</html>

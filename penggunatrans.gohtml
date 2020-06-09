@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src=''></script>
+</head>
+<body>
+{{template "navbar.gohtml" .}}
+<div class="container" style="padding-left:3%;padding-right:3%;" id="container">
+<div class="btn-group mr-2 ml-auto" role="group" style="width:100%;" > <a class="btn btn-secondary " href="index">Back</a> </div>
+    <br><center><h4>Daftar Transaksi</h4></center><br>
+{{range .Transaksis}}
+<a href = "transaksidetil?idtransaksi={{.Idtransaksi}}" >
+<li class="list-group-item d-flex justify-content-between align-items-center">
+<div class="input-group">
+    <input type="text" class="input-group-text justify-content-end" value="{{.Idtransaksi}}" readonly>
+	<input type="text" class="input-group-text" value="Rp{{.Totalharga}}" readonly>
+</div>
+<span class="badge badge-primary badge-pill">{{.Status}}</span>
+</li>
+</a>
+{{end}}
+</div>
+</body>
+</html>
